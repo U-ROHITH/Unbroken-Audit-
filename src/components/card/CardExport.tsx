@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Download, Copy, Check } from 'lucide-react';
+import { Download, Copy, Check, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
-import { ProgressCard, CARD_SIZE, type CardData } from './ProgressCard';
+import { ProgressCard, CARD_SIZE, type CardData, type CardTheme } from './ProgressCard';
 import { cardFilename } from '@/lib/format';
 
 interface Props {
@@ -14,6 +14,7 @@ export function CardExport({ data, caption }: Props) {
   const exportRef = useRef<HTMLDivElement>(null);
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.4);
+  const [theme, setTheme] = useState<CardTheme>('light');
   const [downloading, setDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
   const { success, error } = useToast();
@@ -70,6 +71,24 @@ export function CardExport({ data, caption }: Props) {
 
   return (
     <div className="space-y-4">
+      {/* Theme toggle */}
+      <div className="flex justify-center">
+        <div className="inline-flex rounded-lg border border-line bg-sidebar p-0.5 text-sm">
+          {(['light', 'dark'] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTheme(t)}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium capitalize transition ${
+                theme === t ? 'bg-panel text-ink shadow-notion' : 'text-ink-2 hover:text-ink'
+              }`}
+            >
+              {t === 'light' ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Visible, scaled-down preview */}
       <div
         ref={previewWrapRef}
@@ -77,7 +96,7 @@ export function CardExport({ data, caption }: Props) {
         style={{ height: CARD_SIZE * scale }}
       >
         <div style={{ width: CARD_SIZE, height: CARD_SIZE, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
-          <ProgressCard data={data} />
+          <ProgressCard data={data} theme={theme} />
         </div>
       </div>
 
@@ -93,7 +112,7 @@ export function CardExport({ data, caption }: Props) {
 
       {/* Off-screen full-size node used for the export (unscaled, pixel-exact). */}
       <div style={{ position: 'fixed', left: -99999, top: 0, pointerEvents: 'none' }} aria-hidden>
-        <ProgressCard ref={exportRef} data={data} />
+        <ProgressCard ref={exportRef} data={data} theme={theme} />
       </div>
     </div>
   );

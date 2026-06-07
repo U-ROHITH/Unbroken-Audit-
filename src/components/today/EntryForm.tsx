@@ -145,9 +145,8 @@ export function EntryForm({
       />
       {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
 
-      <div className="flex items-end gap-2.5">
+      <div className="grid grid-cols-2 gap-2.5">
         <TimeField label="Start" {...register('startTime')} value={startTime} />
-        <span className="pb-3 text-ink-3">→</span>
         <TimeField label="End" {...register('endTime')} value={endTime} />
       </div>
 

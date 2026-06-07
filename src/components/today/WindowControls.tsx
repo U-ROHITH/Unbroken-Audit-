@@ -102,9 +102,8 @@ export function WindowControls({ tz, windowStart, windowEnd, hasEntries, onSave 
                   Narrowing the window may push existing entries outside it.
                 </p>
               )}
-              <div className="flex items-end gap-2.5">
+              <div className="grid grid-cols-2 gap-2.5">
                 <TimeField label="Starts" value={start} onChange={(e) => setStart(e.target.value)} />
-                <span className="pb-3 text-ink-3">→</span>
                 <TimeField label="Ends" value={end} onChange={(e) => setEnd(e.target.value)} />
               </div>
               <Chips label="Start at" chips={START_PRESETS} active={start} onPick={(v) => setStart(String(v))} />
