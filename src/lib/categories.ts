@@ -10,10 +10,10 @@ export interface CategoryMeta {
 
 export const CATEGORY_META: Record<Category, CategoryMeta> = {
   productive: { key: 'productive', label: 'Productive', emoji: '⚡', color: '#e8503a', text: 'text-accent' },
-  sleep: { key: 'sleep', label: 'Sleep', emoji: '😴', color: '#5b6cff', text: 'text-accent-sleep' },
-  other: { key: 'other', label: 'Other', emoji: '🌀', color: '#f2b441', text: 'text-accent-other' },
+  sleep: { key: 'sleep', label: 'Sleep', emoji: '😴', color: '#3b5bdb', text: 'text-accent-sleep' },
+  other: { key: 'other', label: 'Other', emoji: '🌀', color: '#f08c00', text: 'text-accent-other' },
 };
 
-export const UNACCOUNTED_COLOR = '#2a2d36';
+export const UNACCOUNTED_COLOR = '#ebeae8';
 
 export const CATEGORY_ORDER: Category[] = ['productive', 'sleep', 'other'];

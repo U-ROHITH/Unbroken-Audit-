@@ -16,9 +16,9 @@ export function Field({
       <span className="label-base">{label}</span>
       {children}
       {error ? (
-        <span className="mt-1 block text-xs text-red-400">{error}</span>
+        <span className="mt-1 block text-xs text-red-500">{error}</span>
       ) : hint ? (
-        <span className="mt-1 block text-xs text-paper/40">{hint}</span>
+        <span className="mt-1 block text-xs text-ink-3">{hint}</span>
       ) : null}
     </label>
   );
@@ -33,7 +33,7 @@ export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputE
 export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(
   function Select({ className = '', children, ...rest }, ref) {
     return (
-      <select ref={ref} className={`input-base appearance-none ${className}`} {...rest}>
+      <select ref={ref} className={`input-base appearance-none bg-canvas ${className}`} {...rest}>
         {children}
       </select>
     );

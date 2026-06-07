@@ -1,21 +1,23 @@
-export function Logo({ className = '' }: { className?: string }) {
+export function Logo({ className = '', compact = false }: { className?: string; compact?: boolean }) {
   return (
-    <span className={`inline-flex items-center gap-2 font-display font-semibold ${className}`}>
-      <span className="grid h-7 w-7 place-items-center rounded-lg bg-ink-soft ring-1 ring-white/10">
-        <svg viewBox="0 0 32 32" className="h-4 w-4">
+    <span className={`inline-flex items-center gap-2 font-display font-semibold text-ink ${className}`}>
+      <span className="grid h-6 w-6 place-items-center rounded-md bg-ink">
+        <svg viewBox="0 0 32 32" className="h-3.5 w-3.5">
           <path
             d="M9 17.5l4.2 4.2L23 11.5"
             fill="none"
-            stroke="#e8503a"
-            strokeWidth="3.4"
+            stroke="#ffffff"
+            strokeWidth="3.6"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
       </span>
-      <span className="tracking-tight">
-        Unbroken<span className="text-accent">Audit</span>
-      </span>
+      {!compact && (
+        <span className="tracking-[-0.01em]">
+          Unbroken<span className="text-accent">Audit</span>
+        </span>
+      )}
     </span>
   );
 }

@@ -4,46 +4,68 @@
 
 :root {
   --color-productive: #e8503a;
-  --color-sleep: #5b6cff;
-  --color-other: #f2b441;
-  --color-unaccounted: #2a2d36;
+  --color-sleep: #3b5bdb;
+  --color-other: #f08c00;
+  --color-unaccounted: #ebeae8;
 }
 
 @layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
   html {
     -webkit-text-size-adjust: 100%;
-    color-scheme: dark;
+    color-scheme: light;
   }
   body {
-    @apply bg-ink text-paper font-sans antialiased;
-    background-image:
-      radial-gradient(60rem 60rem at 110% -10%, rgba(232, 80, 58, 0.10), transparent 60%),
-      radial-gradient(50rem 50rem at -10% 110%, rgba(91, 108, 255, 0.10), transparent 55%);
-    min-height: 100dvh;
+    @apply bg-canvas font-sans text-ink antialiased;
+    font-feature-settings: 'cv11', 'ss01';
   }
   * {
     -webkit-tap-highlight-color: transparent;
   }
   h1, h2, h3 {
-    @apply font-display tracking-tight;
+    @apply font-display tracking-[-0.01em];
   }
-  /* Reasonable focus ring everywhere */
   :focus-visible {
-    @apply outline-none ring-2 ring-accent/70 ring-offset-2 ring-offset-ink;
+    @apply outline-none ring-2 ring-accent/40;
   }
+  /* Thin Notion-like scrollbars on internal panels */
+  .scroll-area {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(55, 53, 47, 0.2) transparent;
+  }
+  .scroll-area::-webkit-scrollbar { width: 10px; }
+  .scroll-area::-webkit-scrollbar-thumb {
+    background: rgba(55, 53, 47, 0.18);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+  .scroll-area::-webkit-scrollbar-thumb:hover { background: rgba(55, 53, 47, 0.3); background-clip: content-box; }
 }
 
 @layer components {
-  .card-surface {
-    @apply rounded-xl2 border border-white/10 bg-ink-soft/80 backdrop-blur-sm;
+  .panel {
+    @apply rounded-xl2 border border-line bg-panel;
   }
   .input-base {
-    @apply w-full rounded-xl border border-white/10 bg-ink-muted/60 px-3.5 py-2.5
-           text-paper placeholder:text-paper/30 transition
-           focus:border-accent/60 focus:bg-ink-muted;
+    @apply w-full rounded-lg border border-line bg-canvas px-3 py-2 text-ink
+           placeholder:text-ink-3 transition
+           hover:border-ink-3/60 focus:border-accent/70 focus:ring-2 focus:ring-accent/15;
   }
   .label-base {
-    @apply mb-1.5 block text-xs font-medium uppercase tracking-wide text-paper/50;
+    @apply mb-1.5 block text-xs font-medium text-ink-2;
+  }
+  .nav-item {
+    @apply flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-ink-2
+           transition hover:bg-hover;
+  }
+  .nav-item-active {
+    @apply bg-active font-medium text-ink;
   }
 }
 

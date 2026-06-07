@@ -11,17 +11,16 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<Variant, string> = {
-  primary:
-    'bg-accent text-white hover:bg-accent/90 active:translate-y-px shadow-[0_8px_24px_-12px_rgba(232,80,58,0.8)]',
-  outline: 'border border-white/15 bg-transparent text-paper hover:bg-white/5',
-  ghost: 'bg-transparent text-paper/70 hover:bg-white/5 hover:text-paper',
-  danger: 'bg-red-600 text-white hover:bg-red-500 active:translate-y-px',
+  primary: 'bg-accent text-white hover:brightness-95 active:brightness-90 shadow-sm',
+  outline: 'border border-line bg-canvas text-ink hover:bg-hover',
+  ghost: 'bg-transparent text-ink-2 hover:bg-hover hover:text-ink',
+  danger: 'bg-red-600 text-white hover:bg-red-700 active:brightness-95',
 };
 
 const sizes: Record<Size, string> = {
-  sm: 'h-9 px-3 text-sm',
-  md: 'h-11 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
+  sm: 'h-8 px-2.5 text-[13px]',
+  md: 'h-9 px-3.5 text-sm',
+  lg: 'h-11 px-5 text-[15px]',
 };
 
 export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
@@ -32,7 +31,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
     <button
       ref={ref}
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center gap-2 rounded-xl font-medium transition
+      className={`inline-flex items-center justify-center gap-1.5 rounded-lg font-medium transition
         disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${sizes[size]} ${className}`}
       {...rest}
     >

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthShell, GoogleButton } from '@/components/auth/AuthShell';
+import { AuthShell, GoogleButton, OrDivider } from '@/components/auth/AuthShell';
 import { Field, Input } from '@/components/ui/Field';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
@@ -57,13 +57,11 @@ export function Signup() {
         </Button>
       </form>
 
-      <div className="my-5 flex items-center gap-3 text-xs text-paper/30">
-        <span className="h-px flex-1 bg-white/10" /> or <span className="h-px flex-1 bg-white/10" />
-      </div>
+      <OrDivider />
 
       <GoogleButton onClick={() => signInWithGoogle().catch((e) => error((e as Error).message))} />
 
-      <p className="mt-5 text-center text-[11px] leading-relaxed text-paper/35">
+      <p className="mt-5 text-center text-[11px] leading-relaxed text-ink-3">
         By continuing you agree to our Terms and acknowledge our Privacy Policy.
       </p>
     </AuthShell>

@@ -22,7 +22,6 @@ export function WindowControls({ tz, windowStart, windowEnd, hasEntries, onSave 
   const lenLabel = formatDuration(windowMinutes(windowStart, windowEnd));
 
   const save = async () => {
-    // anchor start to its own day; end rolls forward past start (supports 7am->7am)
     const newStart = resolveClockToInstant(windowStart, start, tz);
     const newEnd = resolveClockToInstant(newStart, end, tz);
     if (newEnd.getTime() <= newStart.getTime()) {
@@ -41,17 +40,14 @@ export function WindowControls({ tz, windowStart, windowEnd, hasEntries, onSave 
   };
 
   return (
-    <div className="card-surface p-4">
+    <div className="rounded-lg border border-line bg-sidebar/60 px-3.5 py-3">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-paper/70">
+        <div className="flex items-center gap-2 text-ink-2">
           <Clock3 className="h-4 w-4 text-accent" />
-          <span className="text-sm font-medium">Day window</span>
+          <span className="text-[13px] font-medium">Day window</span>
         </div>
         {!editing && (
-          <button
-            onClick={() => setEditing(true)}
-            className="text-xs text-paper/50 hover:text-paper"
-          >
+          <button onClick={() => setEditing(true)} className="text-xs text-ink-3 hover:text-ink">
             Edit
           </button>
         )}
@@ -60,16 +56,16 @@ export function WindowControls({ tz, windowStart, windowEnd, hasEntries, onSave 
       {editing ? (
         <div className="mt-3 space-y-3">
           {hasEntries && (
-            <p className="rounded-lg bg-amber-500/10 px-3 py-2 text-xs text-amber-200/80">
-              Narrowing the window may push existing entries outside it — those edits will be rejected.
+            <p className="rounded-md bg-amber-50 px-2.5 py-1.5 text-xs text-amber-700">
+              Narrowing the window may push existing entries outside it.
             </p>
           )}
-          <div className="flex items-end gap-3">
+          <div className="flex items-end gap-2">
             <label className="flex-1">
               <span className="label-base">Starts</span>
               <input type="time" value={start} onChange={(e) => setStart(e.target.value)} className="input-base" />
             </label>
-            <span className="pb-3 text-paper/30">→</span>
+            <span className="pb-2 text-ink-3">→</span>
             <label className="flex-1">
               <span className="label-base">Ends</span>
               <input type="time" value={end} onChange={(e) => setEnd(e.target.value)} className="input-base" />
@@ -77,7 +73,7 @@ export function WindowControls({ tz, windowStart, windowEnd, hasEntries, onSave 
           </div>
           <div className="flex gap-2">
             <Button size="sm" loading={saving} onClick={save}>
-              <Check className="h-4 w-4" /> Save window
+              <Check className="h-4 w-4" /> Save
             </Button>
             <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>
               Cancel
@@ -85,12 +81,11 @@ export function WindowControls({ tz, windowStart, windowEnd, hasEntries, onSave 
           </div>
         </div>
       ) : (
-        <div className="mt-2 flex items-baseline gap-2">
-          <span className="font-display text-xl">
-            {formatClock(windowStart, tz)} <span className="text-paper/30">→</span>{' '}
-            {formatClock(windowEnd, tz)}
+        <div className="mt-1.5 flex items-baseline gap-2">
+          <span className="font-display text-base font-medium">
+            {formatClock(windowStart, tz)} <span className="text-ink-3">→</span> {formatClock(windowEnd, tz)}
           </span>
-          <span className="text-xs text-paper/40">({lenLabel})</span>
+          <span className="text-xs text-ink-3">({lenLabel})</span>
         </div>
       )}
     </div>
@@ -98,14 +93,10 @@ export function WindowControls({ tz, windowStart, windowEnd, hasEntries, onSave 
 }
 
 function formatInput(iso: string, tz: string): string {
-  // 'h:mm a' -> we need 'HH:mm' for the native input
-  const d = new Date(iso);
-  // derive HH:mm in tz via formatClock then reparse is lossy; use Intl directly
-  const parts = new Intl.DateTimeFormat('en-GB', {
+  return new Intl.DateTimeFormat('en-GB', {
     timeZone: tz,
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-  }).format(d);
-  return parts; // 'HH:mm'
+  }).format(new Date(iso));
 }

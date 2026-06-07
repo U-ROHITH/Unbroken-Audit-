@@ -12,7 +12,7 @@ export function BreakdownBar({ b }: { b: Breakdown }) {
 
   return (
     <div>
-      <div className="flex h-3 w-full overflow-hidden rounded-full bg-ink-muted">
+      <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-line">
         {segs.map((s, i) => (
           <div
             key={i}
@@ -21,37 +21,12 @@ export function BreakdownBar({ b }: { b: Breakdown }) {
           />
         ))}
       </div>
-      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-xs">
-        <Legend
-          color={CATEGORY_META.productive.color}
-          emoji="⚡"
-          label="Productive"
-          minutes={b.productiveMinutes}
-          pct={b.productivePct}
-        />
-        <Legend
-          color={CATEGORY_META.sleep.color}
-          emoji="😴"
-          label="Sleep"
-          minutes={b.sleepMinutes}
-          pct={b.sleepPct}
-        />
-        <Legend
-          color={CATEGORY_META.other.color}
-          emoji="🌀"
-          label="Other"
-          minutes={b.otherMinutes}
-          pct={b.otherPct}
-        />
+      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs">
+        <Legend color={CATEGORY_META.productive.color} emoji="⚡" label="Productive" minutes={b.productiveMinutes} pct={b.productivePct} />
+        <Legend color={CATEGORY_META.sleep.color} emoji="😴" label="Sleep" minutes={b.sleepMinutes} pct={b.sleepPct} />
+        <Legend color={CATEGORY_META.other.color} emoji="🌀" label="Other" minutes={b.otherMinutes} pct={b.otherPct} />
         {b.unaccountedMinutes > 0 && (
-          <Legend
-            color={UNACCOUNTED_COLOR}
-            emoji=""
-            label="Unlogged"
-            minutes={b.unaccountedMinutes}
-            pct={b.unaccountedPct}
-            muted
-          />
+          <Legend color={UNACCOUNTED_COLOR} emoji="" label="Unlogged" minutes={b.unaccountedMinutes} pct={b.unaccountedPct} muted />
         )}
       </div>
     </div>
@@ -74,11 +49,11 @@ function Legend({
   muted?: boolean;
 }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 ${muted ? 'text-paper/40' : 'text-paper/70'}`}>
+    <span className={`inline-flex items-center gap-1.5 ${muted ? 'text-ink-3' : 'text-ink-2'}`}>
       <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: color }} />
       {emoji && <span>{emoji}</span>}
       <span>{label}</span>
-      <span className="tabular-nums text-paper/45">
+      <span className="tabular-nums text-ink-3">
         {Math.round(pct)}% · {formatDuration(minutes)}
       </span>
     </span>

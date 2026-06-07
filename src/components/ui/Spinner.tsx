@@ -2,7 +2,7 @@ import { Loader2 } from 'lucide-react';
 
 export function Spinner({ label }: { label?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 py-16 text-paper/50">
+    <div className="flex flex-col items-center justify-center gap-3 py-16 text-ink-3">
       <Loader2 className="h-6 w-6 animate-spin" />
       {label && <span className="text-sm">{label}</span>}
     </div>
@@ -11,8 +11,8 @@ export function Spinner({ label }: { label?: string }) {
 
 export function FullPageSpinner() {
   return (
-    <div className="grid min-h-dvh place-items-center">
-      <Loader2 className="h-7 w-7 animate-spin text-accent" />
+    <div className="grid h-dvh place-items-center bg-canvas">
+      <Loader2 className="h-6 w-6 animate-spin text-accent" />
     </div>
   );
 }

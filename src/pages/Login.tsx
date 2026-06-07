@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthShell, GoogleButton } from '@/components/auth/AuthShell';
+import { AuthShell, GoogleButton, OrDivider } from '@/components/auth/AuthShell';
 import { Field, Input } from '@/components/ui/Field';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
@@ -69,7 +69,7 @@ export function Login() {
           <Input type="password" autoComplete="current-password" placeholder="••••••••" {...register('password')} />
         </Field>
         <div className="flex justify-end">
-          <Link to="/forgot" className="text-xs text-paper/50 hover:text-paper">
+          <Link to="/forgot" className="text-xs text-ink-3 hover:text-ink">
             Forgot password?
           </Link>
         </div>
@@ -78,9 +78,7 @@ export function Login() {
         </Button>
       </form>
 
-      <div className="my-5 flex items-center gap-3 text-xs text-paper/30">
-        <span className="h-px flex-1 bg-white/10" /> or <span className="h-px flex-1 bg-white/10" />
-      </div>
+      <OrDivider />
 
       <div className="space-y-3">
         <GoogleButton onClick={() => signInWithGoogle().catch((e) => error((e as Error).message))} />

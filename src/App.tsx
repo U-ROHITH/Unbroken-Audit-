@@ -8,8 +8,9 @@ import { ResetPassword } from '@/pages/ResetPassword';
 import { VerifyEmail } from '@/pages/VerifyEmail';
 import { AuthCallback } from '@/pages/AuthCallback';
 import { Dashboard } from '@/pages/Dashboard';
+import { CardPage } from '@/pages/Card';
 import { HistoryPage } from '@/pages/History';
-import { SettingsPage } from '@/pages/Settings';
+import { Account } from '@/pages/Account';
 
 export default function App() {
   return (
@@ -29,8 +30,10 @@ export default function App() {
         }
       >
         <Route path="/" element={<Dashboard />} />
+        <Route path="/card" element={<CardPage />} />
         <Route path="/history" element={<HistoryPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/settings" element={<Navigate to="/account" replace />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,6 +1,10 @@
 import { forwardRef } from 'react';
 import type { Breakdown } from '@/lib/breakdown';
-import { CATEGORY_META, UNACCOUNTED_COLOR } from '@/lib/categories';
+import { CATEGORY_META } from '@/lib/categories';
+
+// The card is a dark export artifact, so unlogged time uses a translucent light track
+// rather than the app's light-gray UNACCOUNTED_COLOR.
+const CARD_TRACK = 'rgba(255,255,255,0.12)';
 
 export interface CardData {
   dayNumber: number;
@@ -26,7 +30,7 @@ export const ProgressCard = forwardRef<HTMLDivElement, { data: CardData }>(
       { color: CATEGORY_META.productive.color, pct: b.productivePct },
       { color: CATEGORY_META.sleep.color, pct: b.sleepPct },
       { color: CATEGORY_META.other.color, pct: b.otherPct },
-      { color: UNACCOUNTED_COLOR, pct: b.unaccountedPct },
+      { color: CARD_TRACK, pct: b.unaccountedPct },
     ];
     const items = data.productiveItems.slice(0, 7);
 
@@ -174,7 +178,7 @@ export const ProgressCard = forwardRef<HTMLDivElement, { data: CardData }>(
               width: '100%',
               borderRadius: 999,
               overflow: 'hidden',
-              background: UNACCOUNTED_COLOR,
+              background: CARD_TRACK,
             }}
           >
             {segs.map((s, i) => (

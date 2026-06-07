@@ -16,15 +16,15 @@ export function VerifyEmail() {
       }
     >
       <div className="flex flex-col items-center text-center">
-        <div className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-accent/15 text-accent">
+        <div className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-accent/12 text-accent">
           <MailCheck className="h-7 w-7" />
         </div>
-        <p className="text-sm text-paper/70">
+        <p className="text-sm text-ink-2">
           We sent a confirmation link{email ? ' to ' : ''}
-          {email && <span className="font-medium text-paper">{email}</span>}. Click it to
+          {email && <span className="font-medium text-ink">{email}</span>}. Click it to
           activate your account, then sign in.
         </p>
-        <p className="mt-4 text-xs text-paper/40">
+        <p className="mt-4 text-xs text-ink-3">
           Email verification is required before your first save.
         </p>
       </div>

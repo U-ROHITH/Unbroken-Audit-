@@ -51,27 +51,27 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4">
+      <div className="pointer-events-none fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
         {toasts.map((t) => (
           <div
             key={t.id}
             role="status"
-            className={`pointer-events-auto flex w-full max-w-sm animate-fade-up items-start gap-3 rounded-xl border px-4 py-3 text-sm shadow-lg backdrop-blur ${
+            className={`pointer-events-auto flex w-full max-w-sm animate-slide-up items-start gap-2.5 rounded-lg border bg-panel px-3.5 py-3 text-sm shadow-pop ${
               t.kind === 'error'
-                ? 'border-red-500/40 bg-red-950/80 text-red-100'
+                ? 'border-red-200 text-red-700'
                 : t.kind === 'success'
-                  ? 'border-emerald-500/40 bg-emerald-950/80 text-emerald-100'
-                  : 'border-white/15 bg-ink-soft/90 text-paper'
+                  ? 'border-emerald-200 text-emerald-700'
+                  : 'border-line text-ink'
             }`}
           >
             {t.kind === 'error' ? (
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             ) : (
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
             )}
-            <span className="flex-1">{t.message}</span>
+            <span className="flex-1 text-ink">{t.message}</span>
             <button onClick={() => remove(t.id)} aria-label="Dismiss">
-              <X className="h-4 w-4 opacity-60 hover:opacity-100" />
+              <X className="h-4 w-4 text-ink-3 hover:text-ink" />
             </button>
           </div>
         ))}

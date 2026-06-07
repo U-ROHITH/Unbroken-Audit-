@@ -73,7 +73,7 @@ export function CardExport({ data, caption }: Props) {
       {/* Visible, scaled-down preview */}
       <div
         ref={previewWrapRef}
-        className="mx-auto w-full overflow-hidden rounded-xl2 border border-white/10 shadow-2xl"
+        className="mx-auto w-full overflow-hidden rounded-xl2 border border-line shadow-pop"
         style={{ height: CARD_SIZE * scale }}
       >
         <div style={{ width: CARD_SIZE, height: CARD_SIZE, transform: `scale(${scale})`, transformOrigin: 'top left' }}>

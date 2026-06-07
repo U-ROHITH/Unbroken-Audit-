@@ -40,7 +40,7 @@ export function ForgotPassword() {
       }
     >
       {isSubmitSuccessful ? (
-        <p className="text-center text-sm text-paper/70">
+        <p className="text-center text-sm text-ink-2">
           Check your inbox for the reset link. You can close this tab.
         </p>
       ) : (

@@ -34,7 +34,7 @@ export function DayMeta({ title, summary, hashtag, onSave }: Props) {
   };
 
   return (
-    <div className="card-surface space-y-3 p-4">
+    <div className="space-y-3">
       <Field label="Title">
         <Input value={t} onChange={(e) => setT(e.target.value)} placeholder="e.g. Deep work Saturday" maxLength={120} />
       </Field>

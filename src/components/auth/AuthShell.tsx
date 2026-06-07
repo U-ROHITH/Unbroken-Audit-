@@ -13,15 +13,15 @@ export function AuthShell({
   footer?: ReactNode;
 }) {
   return (
-    <div className="grid min-h-dvh place-items-center px-4 py-10">
-      <div className="w-full max-w-sm animate-fade-up">
-        <div className="mb-8 flex flex-col items-center text-center">
-          <Logo className="text-lg" />
-          <h1 className="mt-6 text-2xl font-semibold">{title}</h1>
-          {subtitle && <p className="mt-2 text-sm text-paper/50">{subtitle}</p>}
+    <div className="grid min-h-dvh place-items-center bg-sidebar px-4 py-10">
+      <div className="w-full max-w-sm animate-slide-up">
+        <div className="mb-7 flex flex-col items-center text-center">
+          <Logo className="text-base" />
+          <h1 className="mt-6 text-xl font-semibold">{title}</h1>
+          {subtitle && <p className="mt-1.5 text-sm text-ink-2">{subtitle}</p>}
         </div>
-        <div className="card-surface p-6">{children}</div>
-        {footer && <div className="mt-6 text-center text-sm text-paper/50">{footer}</div>}
+        <div className="panel p-6 shadow-notion">{children}</div>
+        {footer && <div className="mt-5 text-center text-sm text-ink-2">{footer}</div>}
       </div>
     </div>
   );
@@ -32,7 +32,7 @@ export function GoogleButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-white/15 bg-white text-sm font-medium text-ink transition hover:bg-white/90"
+      className="flex h-10 w-full items-center justify-center gap-2.5 rounded-lg border border-line bg-canvas text-sm font-medium text-ink transition hover:bg-hover"
     >
       <svg className="h-4 w-4" viewBox="0 0 24 24">
         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/>
@@ -42,5 +42,14 @@ export function GoogleButton({ onClick }: { onClick: () => void }) {
       </svg>
       Continue with Google
     </button>
+  );
+}
+
+/** Small "or" divider used between auth methods. */
+export function OrDivider() {
+  return (
+    <div className="my-5 flex items-center gap-3 text-xs text-ink-3">
+      <span className="h-px flex-1 bg-line" /> or <span className="h-px flex-1 bg-line" />
+    </div>
   );
 }

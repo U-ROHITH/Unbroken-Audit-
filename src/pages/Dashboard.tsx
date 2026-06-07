@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
-import { PlayCircle } from 'lucide-react';
+import { PlayCircle, Image } from 'lucide-react';
 import { useProfile } from '@/hooks/useProfile';
 import { useDay, useEnsureDay } from '@/hooks/useDay';
 import { useStats } from '@/hooks/useStats';
@@ -8,8 +9,9 @@ import { todayLocalDate, buildWindow } from '@/lib/time';
 import { Spinner } from '@/components/ui/Spinner';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import { PageShell } from '@/components/ui/PageShell';
 import { StatRow } from '@/components/today/StatRow';
-import { DayWorkspace } from '@/components/today/DayWorkspace';
+import { DayLog } from '@/components/today/DayLog';
 
 export function Dashboard() {
   const { error } = useToast();
@@ -21,7 +23,7 @@ export function Dashboard() {
   const stats = useStats();
   const ensureDay = useEnsureDay();
 
-  if (profileLoading || dayLoading) return <Spinner label="Loading your day…" />;
+  const dateLabel = format(parseISO(localDate), 'EEEE, MMMM d');
 
   const startDay = async () => {
     if (!profile) return;
@@ -34,43 +36,52 @@ export function Dashboard() {
   };
 
   return (
-    <div className="animate-fade-up space-y-6">
-      <div className="flex items-end justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Today</h1>
-          <p className="text-sm text-paper/50">{format(parseISO(localDate), 'EEEE, MMMM d')}</p>
-        </div>
-        {day?.day_number ? (
-          <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-paper/60">Day {day.day_number}</span>
-        ) : null}
-      </div>
-
-      <StatRow
-        current={stats.data?.current_streak ?? 0}
-        max={stats.data?.max_streak ?? 0}
-        total={stats.data?.total_days ?? 0}
-        loading={stats.isLoading}
-      />
-
-      {day ? (
-        <DayWorkspace day={day} localDate={localDate} tz={tz} currentStreak={stats.data?.current_streak ?? 0} />
+    <PageShell
+      title="Today"
+      subtitle={day?.day_number ? `${dateLabel} · Day ${day.day_number}` : dateLabel}
+      actions={
+        day ? (
+          <Link
+            to="/card"
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line bg-canvas px-2.5 text-[13px] font-medium text-ink transition hover:bg-hover"
+          >
+            <Image className="h-4 w-4" /> Card
+          </Link>
+        ) : undefined
+      }
+    >
+      {profileLoading || dayLoading ? (
+        <Spinner label="Loading your day…" />
       ) : (
-        <div className="card-surface flex flex-col items-center gap-4 py-12 text-center">
-          <div className="grid h-14 w-14 place-items-center rounded-full bg-accent/15 text-accent">
-            <PlayCircle className="h-7 w-7" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold">Start today's audit</h2>
-            <p className="mt-1 text-sm text-paper/50">
-              Your default window is {profile?.default_window_start} for{' '}
-              {(profile?.default_window_minutes ?? 1440) / 60}h.
-            </p>
-          </div>
-          <Button onClick={startDay} loading={ensureDay.isPending}>
-            Begin logging
-          </Button>
+        <div className="space-y-5">
+          <StatRow
+            current={stats.data?.current_streak ?? 0}
+            max={stats.data?.max_streak ?? 0}
+            total={stats.data?.total_days ?? 0}
+            loading={stats.isLoading}
+          />
+
+          {day ? (
+            <DayLog day={day} localDate={localDate} tz={tz} />
+          ) : (
+            <div className="flex flex-col items-center gap-4 rounded-xl2 border border-dashed border-line py-14 text-center">
+              <div className="grid h-12 w-12 place-items-center rounded-full bg-accent/12 text-accent">
+                <PlayCircle className="h-6 w-6" />
+              </div>
+              <div>
+                <h2 className="text-base font-semibold">Start today's audit</h2>
+                <p className="mt-1 text-sm text-ink-2">
+                  Default window {profile?.default_window_start} for {(profile?.default_window_minutes ?? 1440) / 60}h.
+                  You can change the start time any day.
+                </p>
+              </div>
+              <Button onClick={startDay} loading={ensureDay.isPending}>
+                Begin logging
+              </Button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

@@ -68,7 +68,7 @@ export function EntryForm({
     try {
       const s = resolveClockToInstant(windowStart, startTime, tz);
       const e = resolveClockToInstant(s, endTime, tz);
-      return { mins: durationMinutes(s, e), s: s.toISOString(), e: e.toISOString() };
+      return { mins: durationMinutes(s, e) };
     } catch {
       return null;
     }
@@ -84,11 +84,7 @@ export function EntryForm({
       error('Enter valid start and end times.');
       return;
     }
-    const payload = {
-      start_at: s.toISOString(),
-      end_at: e.toISOString(),
-      id: editing?.id,
-    };
+    const payload = { start_at: s.toISOString(), end_at: e.toISOString(), id: editing?.id };
     const problem = validateEntry(payload, {
       window_start: windowStart,
       window_end: windowEnd,
@@ -118,56 +114,51 @@ export function EntryForm({
   });
 
   return (
-    <form onSubmit={submit} className="card-surface space-y-3 p-4">
+    <form onSubmit={submit} className="space-y-3">
       <input
         {...register('name')}
         placeholder="What did you do?"
         aria-label="Entry name"
         className="input-base"
       />
-      {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
+      {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
 
       <div className="flex items-end gap-2">
         <label className="flex-1">
           <span className="label-base">Start</span>
           <input type="time" {...register('startTime')} className="input-base" />
         </label>
-        <span className="pb-3 text-paper/30">→</span>
+        <span className="pb-2 text-ink-3">→</span>
         <label className="flex-1">
           <span className="label-base">End</span>
           <input type="time" {...register('endTime')} className="input-base" />
         </label>
       </div>
 
-      <div>
-        <span className="label-base">Category</span>
-        <div className="grid grid-cols-3 gap-2">
-          {CATEGORY_ORDER.map((c) => {
-            const meta = CATEGORY_META[c];
-            const active = category === c;
-            return (
-              <button
-                key={c}
-                type="button"
-                onClick={() => setValue('category', c, { shouldDirty: true })}
-                className={`flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-sm transition ${
-                  active
-                    ? 'border-transparent text-white'
-                    : 'border-white/10 text-paper/60 hover:border-white/20'
-                }`}
-                style={active ? { backgroundColor: meta.color } : undefined}
-              >
-                <span>{meta.emoji}</span>
-                {meta.label}
-              </button>
-            );
-          })}
-        </div>
+      <div className="grid grid-cols-3 gap-2">
+        {CATEGORY_ORDER.map((c) => {
+          const meta = CATEGORY_META[c];
+          const active = category === c;
+          return (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setValue('category', c, { shouldDirty: true })}
+              className={`flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-[13px] transition ${
+                active ? 'border-transparent text-white' : 'border-line text-ink-2 hover:bg-hover'
+              }`}
+              style={active ? { backgroundColor: meta.color } : undefined}
+            >
+              <span>{meta.emoji}</span>
+              {meta.label}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="flex items-center justify-between pt-1">
-        <span className="text-xs text-paper/45">
-          {livePreview ? `Duration: ${formatDuration(livePreview.mins)}` : 'Pick a start and end time'}
+      <div className="flex items-center justify-between pt-0.5">
+        <span className="text-xs text-ink-3">
+          {livePreview ? `Duration: ${formatDuration(livePreview.mins)}` : 'Pick start & end'}
         </span>
         <div className="flex gap-2">
           {editing && (
@@ -177,7 +168,7 @@ export function EntryForm({
           )}
           <Button type="submit" size="sm" loading={submitting}>
             {editing ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-            {editing ? 'Save' : 'Add entry'}
+            {editing ? 'Save' : 'Add'}
           </Button>
         </div>
       </div>

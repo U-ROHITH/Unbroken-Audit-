@@ -14,44 +14,34 @@ interface Props {
 export function EntryList({ entries, tz, onEdit, onDelete, busyId }: Props) {
   if (entries.length === 0) {
     return (
-      <div className="card-surface flex flex-col items-center gap-1 py-10 text-center">
-        <p className="text-sm text-paper/60">No entries yet.</p>
-        <p className="text-xs text-paper/35">Add your first time block above.</p>
+      <div className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-line py-10 text-center">
+        <p className="text-sm text-ink-2">No entries yet.</p>
+        <p className="text-xs text-ink-3">Add your first time block.</p>
       </div>
     );
   }
 
   return (
-    <ul className="space-y-2">
+    <ul className="divide-y divide-line">
       {entries.map((e) => {
         const meta = CATEGORY_META[e.category];
         return (
-          <li
-            key={e.id}
-            className="group flex items-center gap-3 rounded-xl border border-white/8 bg-ink-soft/60 px-3.5 py-3"
-          >
-            <span
-              className="h-9 w-1.5 shrink-0 rounded-full"
-              style={{ backgroundColor: meta.color }}
-              aria-hidden
-            />
+          <li key={e.id} className="group flex items-center gap-3 py-2.5">
+            <span className="h-8 w-1 shrink-0 rounded-full" style={{ backgroundColor: meta.color }} aria-hidden />
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <span className="truncate font-medium">{e.name}</span>
-                <span className="shrink-0 text-xs" title={meta.label}>
-                  {meta.emoji}
-                </span>
+              <div className="flex items-center gap-1.5">
+                <span className="truncate text-sm font-medium text-ink">{e.name}</span>
+                <span className="shrink-0 text-xs" title={meta.label}>{meta.emoji}</span>
               </div>
-              <div className="mt-0.5 text-xs text-paper/45">
-                {formatClock(e.start_at, tz)} – {formatClock(e.end_at, tz)} ·{' '}
-                {formatDuration(e.duration_minutes)}
+              <div className="mt-0.5 text-xs text-ink-3">
+                {formatClock(e.start_at, tz)} – {formatClock(e.end_at, tz)} · {formatDuration(e.duration_minutes)}
               </div>
             </div>
-            <div className="flex items-center gap-1 opacity-60 transition group-hover:opacity-100">
+            <div className="flex items-center gap-0.5 opacity-0 transition group-hover:opacity-100 focus-within:opacity-100">
               <button
                 onClick={() => onEdit(e)}
                 aria-label={`Edit ${e.name}`}
-                className="rounded-lg p-2 text-paper/60 hover:bg-white/5 hover:text-paper"
+                className="rounded-md p-1.5 text-ink-3 hover:bg-hover hover:text-ink"
               >
                 <Pencil className="h-4 w-4" />
               </button>
@@ -59,7 +49,7 @@ export function EntryList({ entries, tz, onEdit, onDelete, busyId }: Props) {
                 onClick={() => onDelete(e)}
                 disabled={busyId === e.id}
                 aria-label={`Delete ${e.name}`}
-                className="rounded-lg p-2 text-paper/60 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-40"
+                className="rounded-md p-1.5 text-ink-3 hover:bg-red-50 hover:text-red-600 disabled:opacity-40"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
