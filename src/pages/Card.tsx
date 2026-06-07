@@ -27,7 +27,9 @@ export function CardPage() {
       currentStreak: stats.data?.current_streak ?? 0,
       dateLabel: format(parseISO(day.local_date), 'EEE, MMM d yyyy'),
       title: day.title ?? '',
-      productiveItems: day.entries.filter((e) => e.category === 'productive').map((e) => e.name),
+      productiveItems: day.entries
+        .filter((e) => e.category === 'productive')
+        .map((e) => ({ name: e.name, minutes: e.duration_minutes })),
       summary: day.summary,
       hashtag: day.hashtag,
       breakdown: computeBreakdown(day.entries, day.window_minutes),

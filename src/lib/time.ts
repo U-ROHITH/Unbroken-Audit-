@@ -96,6 +96,17 @@ export function formatClock(instant: Date | string, tz: string): string {
   return formatInTimeZone(toDate(instant), tz, 'h:mm a');
 }
 
+/** Format an 'HH:mm' clock string as a 12-hour label, e.g. '07:05' -> '7:05 AM'. */
+export function formatClockLabel(hhmm: string): string {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(hhmm.trim());
+  if (!m) return '';
+  const hh = Number(m[1]);
+  const mm = m[2];
+  const period = hh < 12 ? 'AM' : 'PM';
+  const h12 = hh % 12 === 0 ? 12 : hh % 12;
+  return `${h12}:${mm} ${period}`;
+}
+
 /** Human duration: 90 -> '1h 30m', 45 -> '45m', 120 -> '2h'. */
 export function formatDuration(minutes: number): string {
   const m = Math.max(0, Math.round(minutes));

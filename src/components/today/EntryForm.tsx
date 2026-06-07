@@ -2,7 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
+import { TimeField } from '@/components/ui/TimeField';
+import { Chips } from '@/components/ui/Chips';
 import { useToast } from '@/components/ui/Toast';
 import { entryFormSchema, type EntryFormValues } from '@/lib/validation';
 import { validateEntry } from '@/lib/entryRules';
@@ -26,6 +29,22 @@ interface Props {
   }) => Promise<void>;
 }
 
+const DURATIONS = [
+  { label: '15m', value: 15 },
+  { label: '30m', value: 30 },
+  { label: '45m', value: 45 },
+  { label: '1h', value: 60 },
+  { label: '1h30', value: 90 },
+  { label: '2h', value: 120 },
+  { label: '3h', value: 180 },
+];
+
+function addMinutesToClock(hhmm: string, mins: number): string {
+  const [h, m] = hhmm.split(':').map(Number);
+  const total = (((h! * 60 + m! + mins) % 1440) + 1440) % 1440;
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+}
+
 export function EntryForm({
   tz,
   windowStart,
@@ -37,6 +56,7 @@ export function EntryForm({
 }: Props) {
   const { error } = useToast();
   const [submitting, setSubmitting] = useState(false);
+  const windowStartHHmm = useMemo(() => toHHmm(windowStart, tz), [windowStart, tz]);
 
   const defaults = useMemo<EntryFormValues>(
     () => ({
@@ -74,6 +94,12 @@ export function EntryForm({
     }
   }, [startTime, endTime, windowStart, tz]);
 
+  const applyDuration = (mins: number) => {
+    const base = startTime || windowStartHHmm;
+    setValue('startTime', base, { shouldDirty: true });
+    setValue('endTime', addMinutesToClock(base, mins), { shouldDirty: true });
+  };
+
   const submit = handleSubmit(async (values) => {
     let s: Date;
     let e: Date;
@@ -85,11 +111,7 @@ export function EntryForm({
       return;
     }
     const payload = { start_at: s.toISOString(), end_at: e.toISOString(), id: editing?.id };
-    const problem = validateEntry(payload, {
-      window_start: windowStart,
-      window_end: windowEnd,
-      siblings,
-    });
+    const problem = validateEntry(payload, { window_start: windowStart, window_end: windowEnd, siblings });
     if (problem) {
       error(problem);
       return;
@@ -114,51 +136,49 @@ export function EntryForm({
   });
 
   return (
-    <form onSubmit={submit} className="space-y-3">
+    <form onSubmit={submit} className="space-y-3.5">
       <input
         {...register('name')}
-        placeholder="What did you do?"
+        placeholder="What did you work on?"
         aria-label="Entry name"
         className="input-base"
       />
       {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
 
-      <div className="flex items-end gap-2">
-        <label className="flex-1">
-          <span className="label-base">Start</span>
-          <input type="time" {...register('startTime')} className="input-base" />
-        </label>
-        <span className="pb-2 text-ink-3">→</span>
-        <label className="flex-1">
-          <span className="label-base">End</span>
-          <input type="time" {...register('endTime')} className="input-base" />
-        </label>
+      <div className="flex items-end gap-2.5">
+        <TimeField label="Start" {...register('startTime')} value={startTime} />
+        <span className="pb-3 text-ink-3">→</span>
+        <TimeField label="End" {...register('endTime')} value={endTime} />
       </div>
+
+      <Chips label="Quick duration" chips={DURATIONS} onPick={(v) => applyDuration(Number(v))} />
 
       <div className="grid grid-cols-3 gap-2">
         {CATEGORY_ORDER.map((c) => {
           const meta = CATEGORY_META[c];
           const active = category === c;
+          const Icon = meta.Icon;
           return (
-            <button
+            <motion.button
               key={c}
               type="button"
+              whileTap={{ scale: 0.96 }}
               onClick={() => setValue('category', c, { shouldDirty: true })}
-              className={`flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-[13px] transition ${
+              className={`flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-[13px] font-medium transition ${
                 active ? 'border-transparent text-white' : 'border-line text-ink-2 hover:bg-hover'
               }`}
               style={active ? { backgroundColor: meta.color } : undefined}
             >
-              <span>{meta.emoji}</span>
+              <Icon className="h-4 w-4" />
               {meta.label}
-            </button>
+            </motion.button>
           );
         })}
       </div>
 
       <div className="flex items-center justify-between pt-0.5">
         <span className="text-xs text-ink-3">
-          {livePreview ? `Duration: ${formatDuration(livePreview.mins)}` : 'Pick start & end'}
+          {livePreview ? `Duration · ${formatDuration(livePreview.mins)}` : 'Pick start & end'}
         </span>
         <div className="flex gap-2">
           {editing && (

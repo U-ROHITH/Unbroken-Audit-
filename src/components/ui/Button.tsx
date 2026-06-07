@@ -32,7 +32,8 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
       ref={ref}
       disabled={disabled || loading}
       className={`inline-flex items-center justify-center gap-1.5 rounded-lg font-medium transition
-        disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${sizes[size]} ${className}`}
+        active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100
+        ${variants[variant]} ${sizes[size]} ${className}`}
       {...rest}
     >
       {loading && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { CalendarClock, Image, History, User, Menu, X } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { useProfile } from '@/hooks/useProfile';
@@ -29,10 +30,21 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             to={item.to}
             end={item.end}
             onClick={onNavigate}
-            className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
+            className="relative block"
           >
-            <item.icon className="h-4 w-4 shrink-0 text-ink-3" />
-            {item.label}
+            {({ isActive }) => (
+              <span className={`nav-item relative z-10 ${isActive ? 'font-medium text-ink' : ''}`}>
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-0 -z-10 rounded-md bg-active"
+                    transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+                  />
+                )}
+                <item.icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-accent' : 'text-ink-3'}`} />
+                {item.label}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>

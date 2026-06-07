@@ -1,17 +1,18 @@
+import { Zap, Moon, Orbit, type LucideIcon } from 'lucide-react';
 import type { Category } from '@/types/db';
 
 export interface CategoryMeta {
   key: Category;
   label: string;
-  emoji: string;
-  color: string; // hex — used in card + bars
-  text: string; // tailwind text class
+  Icon: LucideIcon;
+  color: string; // hex — bars, chips, card
+  tint: string; // translucent fill for soft chips
 }
 
 export const CATEGORY_META: Record<Category, CategoryMeta> = {
-  productive: { key: 'productive', label: 'Productive', emoji: '⚡', color: '#e8503a', text: 'text-accent' },
-  sleep: { key: 'sleep', label: 'Sleep', emoji: '😴', color: '#3b5bdb', text: 'text-accent-sleep' },
-  other: { key: 'other', label: 'Other', emoji: '🌀', color: '#f08c00', text: 'text-accent-other' },
+  productive: { key: 'productive', label: 'Productive', Icon: Zap, color: '#e8503a', tint: 'rgba(232,80,58,0.12)' },
+  sleep: { key: 'sleep', label: 'Sleep', Icon: Moon, color: '#3b5bdb', tint: 'rgba(59,91,219,0.12)' },
+  other: { key: 'other', label: 'Other', Icon: Orbit, color: '#f08c00', tint: 'rgba(240,140,0,0.12)' },
 };
 
 export const UNACCOUNTED_COLOR = '#ebeae8';

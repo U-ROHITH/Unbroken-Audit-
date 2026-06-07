@@ -1,6 +1,8 @@
+import { motion } from 'framer-motion';
 import type { Breakdown } from '@/lib/breakdown';
 import { CATEGORY_META, UNACCOUNTED_COLOR } from '@/lib/categories';
 import { formatDuration } from '@/lib/time';
+import type { LucideIcon } from 'lucide-react';
 
 export function BreakdownBar({ b }: { b: Breakdown }) {
   const segs = [
@@ -12,50 +14,48 @@ export function BreakdownBar({ b }: { b: Breakdown }) {
 
   return (
     <div>
-      <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-line">
+      <div className="flex h-3 w-full overflow-hidden rounded-full bg-line">
         {segs.map((s, i) => (
-          <div
+          <motion.div
             key={i}
-            style={{ width: `${s.pct}%`, backgroundColor: s.color }}
-            className="h-full transition-[width] duration-500"
+            initial={{ width: 0 }}
+            animate={{ width: `${s.pct}%` }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
+            style={{ backgroundColor: s.color }}
+            className="h-full"
           />
         ))}
       </div>
-      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs">
-        <Legend color={CATEGORY_META.productive.color} emoji="⚡" label="Productive" minutes={b.productiveMinutes} pct={b.productivePct} />
-        <Legend color={CATEGORY_META.sleep.color} emoji="😴" label="Sleep" minutes={b.sleepMinutes} pct={b.sleepPct} />
-        <Legend color={CATEGORY_META.other.color} emoji="🌀" label="Other" minutes={b.otherMinutes} pct={b.otherPct} />
-        {b.unaccountedMinutes > 0 && (
-          <Legend color={UNACCOUNTED_COLOR} emoji="" label="Unlogged" minutes={b.unaccountedMinutes} pct={b.unaccountedPct} muted />
-        )}
+      <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
+        <Legend Icon={CATEGORY_META.productive.Icon} color={CATEGORY_META.productive.color} label="Productive" minutes={b.productiveMinutes} pct={b.productivePct} />
+        <Legend Icon={CATEGORY_META.sleep.Icon} color={CATEGORY_META.sleep.color} label="Sleep" minutes={b.sleepMinutes} pct={b.sleepPct} />
+        <Legend Icon={CATEGORY_META.other.Icon} color={CATEGORY_META.other.color} label="Other" minutes={b.otherMinutes} pct={b.otherPct} />
       </div>
+      {b.unaccountedMinutes > 0 && (
+        <p className="mt-2 text-xs text-ink-3">
+          {Math.round(b.unaccountedPct)}% unlogged · {formatDuration(b.unaccountedMinutes)}
+        </p>
+      )}
     </div>
   );
 }
 
-function Legend({
-  color,
-  emoji,
-  label,
-  minutes,
-  pct,
-  muted,
-}: {
+function Legend({ Icon, color, label, minutes, pct }: {
+  Icon: LucideIcon;
   color: string;
-  emoji: string;
   label: string;
   minutes: number;
   pct: number;
-  muted?: boolean;
 }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 ${muted ? 'text-ink-3' : 'text-ink-2'}`}>
-      <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: color }} />
-      {emoji && <span>{emoji}</span>}
-      <span>{label}</span>
-      <span className="tabular-nums text-ink-3">
-        {Math.round(pct)}% · {formatDuration(minutes)}
+    <div className="flex items-center gap-2">
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg" style={{ background: `${color}1f`, color }}>
+        <Icon className="h-3.5 w-3.5" />
       </span>
-    </span>
+      <div className="min-w-0">
+        <div className="text-sm font-semibold tabular-nums leading-none">{Math.round(pct)}%</div>
+        <div className="mt-0.5 truncate text-xs text-ink-3">{label} · {formatDuration(minutes)}</div>
+      </div>
+    </div>
   );
 }

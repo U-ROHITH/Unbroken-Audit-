@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
 /**
  * Notion-style page: a fixed header bar and a body that scrolls internally,
@@ -29,7 +30,14 @@ export function PageShell({
         {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
       </header>
       <div className={`scroll-area min-h-0 flex-1 ${bodyClassName}`}>
-        <div className={`mx-auto w-full ${maxWidth} px-5 py-5 sm:px-8 sm:py-7`}>{children}</div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          className={`mx-auto w-full ${maxWidth} px-5 py-5 sm:px-8 sm:py-7`}
+        >
+          {children}
+        </motion.div>
       </div>
     </div>
   );
